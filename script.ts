@@ -10,18 +10,31 @@ async function main() {
   // })
   // console.log(post)
 
-  // const post = await prisma.post.create({
-  //   data: {
-  //     title: 'Prisma make databases easy',
-  //     author: {
-  //       connect: { email: 'sarah@prisma.io'},
-  //     },
-  //   },
-  // })
-  // console.log(post)
+  console.log('Create user ----------------------------------------------------------------')
+  for (let i = 1;i<=10;i++) {
+    const email = `user-${i}@prisma.io`
+    const name = `user-${i}`
+    await prisma.user.create({
+      data: {
+        email: email,
+        name: name
+      }
+    })
+    await prisma.post.create({
+      data: {
+        title: 'Prisma make databases easy',
+        author: {
+          connect: { email: email},
+        },
+      },
+    })
+  }
 
+  console.log('Show all users ----------------------------------------------------------------')
   const allUsers = await prisma.user.findMany()
   console.dir(allUsers, {depth: null})
+  const allPosts = await prisma.post.findMany()
+  console.dir(allPosts, {depth: null})
 }
 
 main()
